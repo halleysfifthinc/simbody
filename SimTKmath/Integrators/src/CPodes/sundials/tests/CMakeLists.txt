@@ -42,7 +42,7 @@ foreach(TEST_PROG ${REGR_TESTS})
         PROPERTIES
           PROJECT_LABEL "Test_Regr - ${TEST_ROOT}")
         target_link_libraries(${TEST_ROOT} 
-                    ${TEST_SHARED_TARGET})
+                    SimTKmath)
         add_test(${TEST_ROOT} ${EXECUTABLE_OUTPUT_PATH}/${TEST_ROOT})
     endif()
 
@@ -55,7 +55,7 @@ foreach(TEST_PROG ${REGR_TESTS})
         COMPILE_FLAGS "-DSimTK_USE_STATIC_LIBRARIES"
         PROJECT_LABEL "Test_Regr - ${TEST_STATIC}")
         target_link_libraries(${TEST_STATIC}
-                    ${TEST_STATIC_TARGET})
+                    SimTKmath)
         add_test(${TEST_STATIC} ${EXECUTABLE_OUTPUT_PATH}/${TEST_STATIC})
     endif()
 
