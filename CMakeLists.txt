@@ -87,10 +87,7 @@ ON)
 # enable_testing() command, but we'll take it over here for
 # our own purposes too.
 set(BUILD_TESTING ON CACHE BOOL
-    "Control building of Simbody test programs.
-    To actually build tests, one
-    or both of BUILD_TESTS_AND_EXAMPLES_STATIC and
-    BUILD_TESTS_AND_EXAMPLES_SHARED must be ON.")
+    "Build tests for Simbody libraries.")
 
 set(BUILD_USING_NAMESPACE "" CACHE STRING
     "Add a prefix to library filenames. (e.g. `BUILD_USING_NAMESPACE=ns_` would \
