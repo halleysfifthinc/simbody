@@ -253,11 +253,6 @@ if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" OR
     endif()
 endif()
 
-set(SIMBODY_COPYRIGHT_YEARS "2005-20")
-
-# underbar separated list of dotted authors, no spaces or commas
-set(SIMBODY_AUTHORS "Michael.Sherman_Peter.Eastman")
-
 set(SIMBODY_SONAME_VERSION
     "${Simbody_VERSION_MAJOR}.${Simbody_VERSION_MINOR}"
     CACHE INTERNAL
@@ -546,13 +541,6 @@ elseif(MSVC)
         CACHE STRING "Control using BUILD_CXX" FORCE)
 
 endif()
-
-# Collect up information about the version of the simbody library we're building
-# and make it available to the code so it can be built into the binaries.
-add_compile_definitions(
-   SimTK_SIMBODY_COPYRIGHT_YEARS="${SIMBODY_COPYRIGHT_YEARS}"
-   SimTK_SIMBODY_AUTHORS="${SIMBODY_AUTHORS}"
-)
 
 if(BUILD_USING_OTHER_LAPACK)
     set(LAPACK_BEING_USED ${BUILD_USING_OTHER_LAPACK} CACHE INTERNAL
