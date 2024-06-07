@@ -550,13 +550,9 @@ set(SIMBODY_VISUALIZER_INSTALL_DIR
 # use by the later builds.
 add_custom_target(PlatformFiles ALL)
 add_subdirectory( Platform )
-# PLATFORM_INCLUDE_DIRECTORIES now set
 add_subdirectory( SimTKcommon )
-# SimTKCOMMON_INCLUDE_DIRECTORIES now set
 add_subdirectory( SimTKmath )
-# SimTKMATH_INCLUDE_DIRECTORIES now set
 add_subdirectory( Simbody )
-# SimTKSIMBODY_INCLUDE_DIRECTORIES now set(but not used)
 # GUI_NAME now set
 
 if( BUILD_EXAMPLES )
