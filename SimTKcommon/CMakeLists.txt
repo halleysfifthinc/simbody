@@ -108,7 +108,6 @@ add_library(SimTKcommon
     ${SOURCE_FILES} ${SOURCE_INCLUDE_FILES}
     ${API_ABS_INCLUDE_FILES})
 
-add_dependencies(SimTKcommon PlatformFiles)
 
 target_link_libraries(SimTKcommon PUBLIC ${MATH_LIBS_TO_USE})
 
@@ -150,6 +149,12 @@ target_compile_features(SimTKcommon PUBLIC cxx_std_11)
 target_compile_options(SimTKcommon INTERFACE
     "$<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:Debug>>:/wd4996>")
 
+# Copy third-party libs (e.g. vendors BLAS/LAPACK) to the build directory
+add_custom_command(TARGET SimTKcommon PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:SimTKcommon> $<TARGET_RUNTIME_DLLS:SimTKcommon>
+    COMMAND_EXPAND_LISTS
+  )
+
 # install library; on Windows .dll's go in bin directory
 install(TARGETS SimTKcommon EXPORT SimbodyTargets
     PERMISSIONS
@@ -161,6 +166,16 @@ install(TARGETS SimTKcommon EXPORT SimbodyTargets
     ARCHIVE
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ GROUP_WRITE WORLD_READ
         DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# This will only do anything on Windows, so no need to specify permissions
+install(IMPORTED_RUNTIME_ARTIFACTS SimTKcommon
+    RUNTIME_DEPENDENCY_SET vendored-dlls
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(RUNTIME_DEPENDENCY_SET vendored-dlls
+    PRE_EXCLUDE_REGEXES "^(api|ext)-ms"
+    POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+    )
 
 if(NOT SIMBODY_BUILD_SHARED_LIBS AND SIMBODY_COVERAGE)
     add_coverage(SimTKcommon)
