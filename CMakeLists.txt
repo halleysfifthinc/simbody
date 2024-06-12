@@ -10,19 +10,9 @@
 #    (5) Build examples
 #
 #-------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 3.17) # Needed for DEPRECATION message level
-cmake_policy(SET CMP0048 NEW)
+cmake_minimum_required(VERSION 3.21) # Needed for install(RUNTIME_DEPENDENCY_SET ...)
 
 project(Simbody VERSION 3.8.0)
-
-# TODO: Remove when cmake_minimum_required is bumped above 3.21
-if(CMAKE_VERSION VERSION_LESS 3.21.0)
-  if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    set(Simbody_IS_TOP_LEVEL ON)
-  else()
-    set(Simbody_IS_TOP_LEVEL OFF)
-  endif()
-endif()
 
 ## List of Simbody build configuration options:
 #-------------------------------------------------------------------------------
@@ -38,12 +28,6 @@ endif()
 option(SIMBODY_BUILD_SHARED_LIBS
     "Build dynamic (shared) Simbody libraries Defaults to ON or the value of BUILD_SHARED_LIBS if defined."
     ${shared_lib_default})
-# TODO: Replace above with the following when cmake_minimum_required is bumped above 3.22
-# (use of DEFINED condition in cmake_dependent_option only supported after 3.22):
-# include(CMakeDependentOption)
-# cmake_dependent_option(SIMBODY_BUILD_SHARED_LIBS
-#     "Build dynamic (shared) Simbody libraries Defaults to ON or value of BUILD_SHARED_LIBS if defined."
-#     ${BUILD_SHARED_LIBS} "DEFINED BUILD_SHARED_LIBS" ON)
 
 # TODO: Remove after this version cycle?
 option(BUILD_DYNAMIC_LIBRARIES
@@ -546,13 +530,10 @@ endif()
 set(SIMBODY_VISUALIZER_INSTALL_DIR
     ${CMAKE_INSTALL_PREFIX}/${SIMBODY_VISUALIZER_REL_INSTALL_DIR})
 
-# Each of these returns a list of API include directories for
-# use by the later builds.
 add_subdirectory( Platform )
 add_subdirectory( SimTKcommon )
 add_subdirectory( SimTKmath )
 add_subdirectory( Simbody )
-# GUI_NAME now set
 
 if( BUILD_EXAMPLES )
     add_subdirectory( examples )
