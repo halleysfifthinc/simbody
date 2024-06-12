@@ -122,11 +122,11 @@ endif()
 
 
 # These are IMPORTED targets created by SimbodyTargets.cmake
-if(TARGET SimTKcommon AND TARGET SimTKmath AND TARGET SimTKsimbody)
+if(TARGET Simbody::SimTKcommon AND TARGET Simbody::SimTKmath AND TARGET Simbody::SimTKsimbody)
     if(@SIMBODY_BUILD_SHARED_LIBS@)
-        set(Simbody_LIBRARIES SimTKcommon SimTKmath SimTKsimbody)
+        set(Simbody_LIBRARIES Simbody::SimTKcommon Simbody::SimTKmath Simbody::SimTKsimbody)
     else()
-        set(Simbody_STATIC_LIBRARIES SimTKcommon SimTKmath SimTKsimbody)
+        set(Simbody_STATIC_LIBRARIES Simbody::SimTKcommon Simbody::SimTKmath Simbody::SimTKsimbody)
     endif()
 else()
     set(Simbody_LIBRARIES Simbody_LIBRARIES-NOTFOUND)
