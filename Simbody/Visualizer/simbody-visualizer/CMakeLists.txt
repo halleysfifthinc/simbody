@@ -112,15 +112,17 @@ else()
                                 WORLD_READ WORLD_EXECUTE
             DESTINATION ${SIMBODY_VISUALIZER_INSTALL_DIR})
 
-    # on Windows we also have to copy and later install the glut32.dll
-    # no need to specify permissions on Windows
-    install(IMPORTED_RUNTIME_ARTIFACTS simbody-visualizer
-        RUNTIME_DEPENDENCY_SET glut-vendored-dlls
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-    install(RUNTIME_DEPENDENCY_SET glut-vendored-dlls
-        PRE_EXCLUDE_REGEXES "^(api|ext)-ms"
-        POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
-        )
+    if(WIN32)
+        # on Windows we also have to copy and later install the glut32.dll
+        # no need to specify permissions on Windows
+        install(IMPORTED_RUNTIME_ARTIFACTS simbody-visualizer
+            RUNTIME_DEPENDENCY_SET glut-vendored-dlls
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+        install(RUNTIME_DEPENDENCY_SET glut-vendored-dlls
+            PRE_EXCLUDE_REGEXES "^(api|ext)-ms"
+            POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+            )
+    endif()
 
 endif()
