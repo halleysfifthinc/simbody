@@ -149,11 +149,13 @@ target_compile_features(SimTKcommon PUBLIC cxx_std_11)
 target_compile_options(SimTKcommon INTERFACE
     "$<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:Debug>>:/wd4996>")
 
-# Copy third-party libs (e.g. vendors BLAS/LAPACK) to the build directory
-add_custom_command(TARGET SimTKcommon PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:SimTKcommon> $<TARGET_RUNTIME_DLLS:SimTKcommon>
-    COMMAND_EXPAND_LISTS
-  )
+if(BUILD_SHARED_LIBS)
+    # Copy third-party libs (e.g. vendors BLAS/LAPACK) to the build directory; only valid for shared libraries
+    add_custom_command(TARGET SimTKcommon PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:SimTKcommon> $<TARGET_RUNTIME_DLLS:SimTKcommon>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
 
 # install library; on Windows .dll's go in bin directory
 install(TARGETS SimTKcommon EXPORT SimbodyTargets
