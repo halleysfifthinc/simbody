@@ -64,15 +64,6 @@ if(BUILD_DYNAMIC_LIBRARIES AND BUILD_STATIC_LIBRARIES)
     message(FATAL_ERROR "Simultaneous static and shared library builds are no longer supported.
         Please see the simbody/README.MD for instructions to produce similar builds.")
 endif()
-cmake_minimum_required(VERSION ${SIMBODY_REQUIRED_CMAKE_VERSION})
-
-project(Simbody VERSION 3.8.0)
-
-# Caution: this variable is automatically created by the CMake
-# enable_testing() command, but we'll take it over here for
-# our own purposes too.
-set(BUILD_TESTING ON CACHE BOOL
-    "Build tests for Simbody libraries.")
 
 set(BUILD_USING_NAMESPACE "" CACHE STRING
     "Add a prefix to library filenames. (e.g. `BUILD_USING_NAMESPACE=ns_` would \
@@ -117,74 +108,23 @@ if(DEFINED BUILD_TESTS_AND_EXAMPLES_SHARED)
         and examples and tests are linked against these libraries.")
 endif()
 
-option(SIMBODY_COVERAGE
-       "Adding ability to assess test coverage (requires gcc or clang)."
-       OFF)
+option(BUILD_VISUALIZER
+    "Build and install the Simbody visualizer."
+    ON)
 
-option(INSTALL_DOCS
-"Build and install Simbody documentation."
-ON)
+option(BUILD_EXAMPLES
+    "Build and install Simbody examples."
+    ON)
 
 # Caution: this variable is automatically created by the CMake
 # enable_testing() command, but we'll take it over here for
 # our own purposes too.
 set(BUILD_TESTING ON CACHE BOOL
-    "Control building of Simbody test programs.
-    To actually build tests, one
-    or both of BUILD_TESTS_AND_EXAMPLES_STATIC and
-    BUILD_TESTS_AND_EXAMPLES_SHARED must be ON.")
+    "Build tests for Simbody libraries.")
 
-set(BUILD_USING_NAMESPACE "" CACHE STRING
-    "Add a prefix to library filenames. (e.g. `BUILD_USING_NAMESPACE=ns_` would \
-produce libraries like 'libns_SimTKmath.so' on Unix).")
-mark_as_advanced(BUILD_USING_NAMESPACE)
-
-option(BUILD_UNVERSIONED_LIBRARIES
-    "Build a set of Simbody libraries without a version suffix (e.g. library names like 'libSimTKMath.so')"
-    ON)
-mark_as_advanced(BUILD_UNVERSIONED_LIBRARIES)
-
-option(BUILD_VERSIONED_LIBRARIES
-    "Build a set of Simbody libraries with a version suffix (e.g. library names like 'libSimTKMath_3.8.so')"
-    OFF)
-mark_as_advanced(BUILD_VERSIONED_LIBRARIES)
-
-include(CMakeDependentOption)
-
-cmake_dependent_option(BUILD_TESTS_AND_EXAMPLES_STATIC
-    "Statically link tests and examples against static Simbody libraries.\
-Static linking increases the build time and uses more storage than dynamic \
-linking. However, statically-linked tests may be easier to debug on Windows \
-than dynamically-linked tests."
-    ON "BUILD_STATIC_LIBRARIES" OFF
-)
-mark_as_advanced(BUILD_TESTS_AND_EXAMPLES_STATIC)
-
-cmake_dependent_option(BUILD_TESTS_AND_EXAMPLES_SHARED
-    "Dynamically link tests and examples against shared Simbody libraries.\
-Dynamic linking has faster build times and uses less storage than static \
-linking."
-    ON "BUILD_DYNAMIC_LIBRARIES" OFF
-)
-mark_as_advanced(BUILD_TESTS_AND_EXAMPLES_SHARED)
-
-if(BUILD_TESTING AND NOT (BUILD_TESTS_AND_EXAMPLES_STATIC OR
-        BUILD_TESTS_AND_EXAMPLES_SHARED))
-    message(SEND_ERROR
-        "Requested build configuration is invalid! BUILD_TESTING is set to ON, "
-        "but no tests will be built because dynamic and statically-linked tests "
-        "are disabled. (BUILD_TESTS_AND_EXAMPLES_SHARED and "
-        "BUILD_TESTS_AND_EXAMPLES_STATIC have been manually set to OFF)")
-endif()
-
-if(BUILD_EXAMPLES AND NOT (BUILD_TESTS_AND_EXAMPLES_STATIC OR
-        BUILD_TESTS_AND_EXAMPLES_SHARED))
-    message(SEND_ERROR
-        "Requested build configuration is invalid! BUILD_EXAMPLES is set to ON, "
-        "but no examples will be built because dynamic and statically-linked examples "
-        "are disabled. (BUILD_TESTS_AND_EXAMPLES_SHARED and "
-        "BUILD_TESTS_AND_EXAMPLES_STATIC have been manually set to OFF)")
-endif()
+option(INSTALL_DOCS
+"Build and install Simbody documentation."
+ON)
 
 option(SIMBODY_COVERAGE
     "Generate code coverage files to assess test coverage (ignored for MSVC compilers)"
