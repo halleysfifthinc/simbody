@@ -551,23 +551,9 @@ endif()
 
 # Try to link against the requested BLAS/LAPACK libraries
 set(CMAKE_TRY_COMPILE_TARGET_TYPE EXECUTABLE)
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/lapack_test.c
-"\
-#include \"SimTKlapack.h\"
-int main () {
-int n = 2;
-int stride = 1;
-float x[] = {1.0, 1.0};
-float y[] = {2.0, 3.0};
-
-float d = sdot_(&n, x, &stride, y, &stride);
-
-return !(d == 5.0); // return zero if sdot_ worked
-}
-")
 
 try_compile(OTHER_LAPACK_FUNCTIONAL ${CMAKE_CURRENT_BINARY_DIR}
-    SOURCES ${CMAKE_CURRENT_BINARY_DIR}/lapack_test.c
+    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/SimTKcommon/tests/adhoc/lapack_test.c
     CMAKE_FLAGS -DINCLUDE_DIRECTORIES=${CMAKE_CURRENT_SOURCE_DIR}/SimTKcommon/include
     OUTPUT_VARIABLE BLAS_TRYCOMPILE_LOG
     LINK_LIBRARIES ${LAPACK_BEING_USED})
@@ -579,7 +565,6 @@ else()
     message(AUTHOR_WARNING ${BLAS_TRYCOMPILE_LOG})
     message(FATAL_ERROR "Failed to compile using the BLAS/LAPACK libraries ${LAPACK_BEING_USED}.
         If BUILD_USING_OTHER_LAPACK was given; check that it was set correctly.")
-
 endif()
 
 if(UNIX)
